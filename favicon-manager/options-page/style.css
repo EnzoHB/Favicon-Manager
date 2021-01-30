@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@800&display=swap');
+
+body {
+    font-family: 'Merriweather Sans', sans-serif;
+    color: white;
+    background-color: rgb(59, 59, 59);
+}
+
+.URLObjects, th, td {
+    border: solid 1px white;
+    border-collapse: collapse;
+}
+
+.URLObjects {
+    position: relative;
+    width: 100%;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+td {
+    text-align: center;
+    padding: 6px 0 6px 0;
+}
+
+th {
+    padding: 4px 0 4px 0;
+}
+
+.favIcon {
+    width: 16px;
+    height: 16px;
+} 
+
+.save:hover .reset:hover {
+    background-color: rgb(203, 207, 211);
+}
+
+.content {
+    height: 238px;
+    overflow-y: auto;
+    bottom: 1px;
+}
+
+.content::-webkit-scrollbar-button {
+    background-color: rgb(59,59,59);
+    height: 0.1px;
+}
+
+.content::-webkit-scrollbar-track {
+    background-color: rgb(59,59,59);
+}
+
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+.content::-webkit-scrollbar-thumb {
+    background-color: #ffffff;
+    border-radius: 1px;
+    height: 40px;
+}
+
+.remove {
+    font-size: 9px;
+    background-color: rgb(174, 0, 0);
+    outline: 0;
+    border: 0;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
+button, input {
+    outline: 0;
+    border: 0;
+    font-family: 'Merriweather Sans', sans-serif ;
+    font-size: 10px;
+    border-radius: 0;
+}
+
+.clear {
+    color: white;
+    background-color: rgb(52, 52, 52);
+    display: inline-block; 
+    margin: 0 2px 0 2px;
+    width: 100%;
+}
+
+.change {
+    width: 100%;
+    margin: 0 2px 0 2px;
+    display: inline-block;
+    background-color: rgb(52, 52, 52);
+    color: white;
+    height: 30px;
+}
+
+.pause {
+    background-color: rgb(52, 52, 52);
+    color: white;
+    width: 100%;
+    margin: 0 2px 0 2px;
+    display: inline-block;
+    height: 30px;
+}
+
+.info {
+    display: inline;
+    width: 100%;
+    text-align: center;
+    margin: 2px;
+    height: 30px;
+    font-size: 10px;
+    border-radius: 7px;
+    background-color: rgb(52, 52, 52);
+    color: white;
+}
+
+.information {
+    margin: 3px 0 0 0;
+    width: 100%;
+    text-align: center;
+}

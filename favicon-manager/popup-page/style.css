@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@800&display=swap');
+
+body {
+    background-position: center;
+    background-size: cover;
+    background-image: url('/img/background.png');
+    height: 135px;
+    width: 240px;
+    color: white;
+    font-family: 'Merriweather Sans', sans-serif;
+    font-weight: bold;
+}
+
+header {
+    text-align: center;
+    position: relative;
+    bottom: 16px;
+}
+
+h1 {
+    border-bottom: solid 2px white;
+    margin-bottom: 1px;
+    padding: 4px;
+}
+
+sub {
+    margin: 0;
+    font-size: 8px;
+}
+
+.inputRadio {
+    height: 1px;
+    width: 1px;
+}
+
+.controls label > input{
+    visibility: hidden;
+}
+.controls label > input + p{
+    cursor: pointer;
+    background-color: rgb(20, 179, 20);
+    filter: opacity(50%);
+    padding: 6px;
+    border-radius: 10px
+}
+.controls label > input:checked + p {
+    filter: opacity(100%);
+}
+
+label {
+    margin: 0 7px 0 7px;
+}
+
+p {
+    display: inline-block;
+}
+
+section {
+    position: relative;
+    top: 30px;
+}
+
+
+
