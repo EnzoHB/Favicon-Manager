@@ -1,21 +1,75 @@
 # Favicon-Manager
- Esta é uma extensão que funciona em navegadores baseados em Chromium. Sua principal funcionalidade é esconder os FavIcons de todos os WebSites. Mais funcionalidades virão! Quero dar um tempo, pois estou trabalhando nela por mais de 7 dias seguidos. Ela funciona em conjunto com o tema Node Clean - Que eu também fiz nesses 7 dias! Dê uma olhada sobre o que ele se trata e então entenderá o propósito desta extensão.  
- Sério, eu aprendi uma monte de coisas novas! Tive que realmente me esforçar, passei por incontáveis bugs, mas nada me fez desistir. Eu gostaria de contar toda a minah jornada fazendo essa extensão! Contar como ela funciona, alguns truques que aprendi no caminho e sei que isso definitivamente vai ajudar algumas pessoas.  
- Algumas considerações:
- Eu sou um completo iniciante. Basicamente só sei JavaScript, o básico de HTML e o mínimo do básico sobre CSS. Mas ainda sim, me esforço. Eu nunca tinha criado uma extensão antes, não sabia praticamente de nada! Aliás, para piorar a minha situação, me deparei com algumas informações erradas na própria documentação do Chrome que me fizeram dar voltas e não sair do lugar. Voltando a falar sobre a minha inexperiência, eu nunca tinha usado uma API antes. Eu sabia o que era, mas nunca tiha visto alguém usar e muito menos usado uma. Comecei do puro zero. Esqueci de mencionar que nunca tinha usado ES6 Modules e não estava claro para mim o que era um JSON ainda. Se por um acaso, você está lendo isso e se encontra nessa situação - Isso definitivamente é para você.
- Não só cobrirei todos os Bugs e dificuldades que enfrentei no caminho, como também minhas observações e soluções para os problemas. Espero muito, muito mesmo que alguém possa me ajudar a melhorar meus scripts. Existem ainda alguns bugs sem solução que eu provavelmente corrigirei no futuro.
- Ah! Durante as minhas intermináveis pesquisas, percebi que a search do Google busca informações nas issues do GitHub. Então por isso, a maioria das minhas observações estarão por lá.
- Antes de contar sobre a minha jornada gostaria de contar como a extensão funciona - É bem simples explicando através de linguagem natural, porém um pouco mais complicado no código devido à quantidade de exceções que isso tem.
- Toda vez que você abre uma Tab, o script procura pela Url da página - mais especificamente a requiredURL, como eu chamei. Eu realmente não sei o nome específico da primeira parte da URL. Vi que alguns chamam de url rule, mas só descobri isso muito tempo depois de começar.
-Basicamente, é uma regular expression que dá match em protocolo://subdomain?.domain.gtld?.tld?/ - logo, a requiredURL de https://mail.google.com/mail/u/0/#inbox seria https://mail.google.com/;
- Depois que o script já está com a URL dentro de uma variável, ele itera pelo localStorage - Uma espécie de instância da class Map que fica guardada na memória do navegador - procurando por essa URL. A partir daqui existem 4 casos possíveis, mas afim de encurtar a nossa história, iremos considerar apenas 2. O Primeiro caso é que ele não encontrou essa URL na memória e por isso, coloca um objeto stringfied contendo algumas informações importantes que usaremos mais para frente dentro de LocalStorage. O Segundo caso é que ele encontrou essa URL na memória. Uma vez que isso ocorra, ele puxa esse objeto e verifica o seu "state". Se o state for 0, ele não faz absolutamente nada. Do contrário, ele modifica o FavIcon do site. Simples! Este é o arquivo que roda 24h por dia enquanto o navegador estiver aberto. Ele é chamado background.
- Agora, partimos para a User Interface. Lembre-se que o background sempre cria um arquivo. Então, sempre haverá um arquivo disponível para a Tab atual. E é isso mesmo que ocorre. Ao clicar na extensão, o script procura na memória pelo objeto correspondente à tab atual através do mesmo mecanismo o qual o background as cria - requiredURls, ele verifica o "state" e simplesmente dá um update nos botões indicando qual está ativo. A partir daí ele aguarda o input do usuário.  
- Simplesmente, precisamos altenar: Dependendo do valor de state ( 0 ou 1 ) devemos atualizar os botões, salvar na memória, alterar o FavIcon. É isso que o script faz, vamos chamá-lo de popup;
- Por fim, temos o arquivo de options. Vamos chamá-lo de options script. Ele simplesmente lê e altera os dados que estão na memória oferecendo ao usuário uma interface para gerenciá-los.
- Nesses poucos princípios e dessas poucas ideias que eu me baseie durante todo o desenvolvimento. Antes de começá-lo, eu escrevi essa mesma coisa porém de uma forma bem mais simplificada.  
- Vamos agora que começar a descrever essa incrível jornada que foi aprender a desenvolver uma extensão para o Chrome.  
- Dia 1 :
- Nesse dia, eu me lembro que estava sentado no sofá. Há mais ou menos dois mêses anteriormente a esse dia, eu já havia tentado criar uma extensão. Só que logo naquela época, percebi que não sabia o bastante para começar uma então desisti. Por um breve momento. Como provavelmente você leu o README do Node-Clean-Theme, você sabe que essa será a minha única saída contra as garras de um Chromebook gerenciado por uma organização. Então, em um daqueles momentos que você coloca na sua cabeça que irá aprender algo nem que você morra, eu levantei do sofá o comecei a pesquisar. Mas... Por onde começar? Eu fui onde todos iriam: "Como fazer uma extensão para o Chrome", pedi ao nosso querido amigo Google. Logo, me deparei com uma série de tutoriais. Sabia que eles eram pouca coisa. Não ensinavam muito. Logo, cheguei ao developer.chrome.com, mas especificamente na parte que ele introduz as extensões. De cara, você é induzido a começar pela versão 3 do JSON. Só segui onde o Site me levava. Porém me deparei com um grande aviso em azul - The manifest V3 is launching soon. Wait a minute... Se está lançando, quer dizer que a maior parte do conteúdo na internet é sobre a versão 2 do JSON. Bye V3, hello V2. Comecei a ler toda a introdução. Absolutamente tudo. Confesso que não estava entendendo muitas coisas. Mais continuei seguindo. Até que cheguei na seção "What are Chrome Themes?". Chrome Themes! Mas é claro, que coisa seria mais fácil para começar a desenvolver? Comecei a pesquisar como um louco. Li tudo que o Chrome me indiciou. Mas não era o suficiente. Fui de repositório em repositório, stackoverflow em stackoverflow procurando até ficar exausto. Comecei a brincar com cada propriedade e rapidamente descobri o que cada uma fazia, principalmente as imagens. Consegui alguns resultados bem engraçados. O Melhor de tudo, despois de passar quase que a tarde toda revirando a Internet e mudando as configurações do JSON de exemplo que o chrome me passou, eu finalmente descobri um site que criava um tema de forma automática para mim. Que maravilha! Utilizando a interface deles, percebi uma coisa. Se eu colocasse toolbar 
- : [10, 17, 27], as tabs no fundo ficavam 'invisíveis' com exceção dos FavIcons. Hmmm, isso me deu uma ideia. Mas vamos fazer algo mais simples e depois partimos para essa ideia.
- Dia 2:
- 
+**Esta é uma extensão que funciona em navegadores baseados em Chromium. Sua principal funcionalidade é esconder os FavIcons de WebSites.**  
+
+**Mais funcionalidades estão por vir! Ela funciona em conjunto com o tema [Node Clean.]() Dê uma olhada sobre o que ele se trata e então entenderá o propósito desta extensão.** 
+
+# A Extensão  
+**Seu funcionamento é bem simples explicando através de linguagem natural, porém um pouco mais complicado no código devido à quantidade pequenos detalhes que existem.**
+**Para desenvolvê-la, utilizei a API tabs do Chrome e JavaScript Puro. Bem simples! É claro que seu propósito *é* ser simples. Por isso a sua UI é minimalista. Possui apenas dois botões que são usados para esconder e mostrar o FavIcon.**
+
+**Eu me diverti e aprendi _MUITO_ desenvolvendo-a. Para se ter uma ideia, nunca tinha escrito um JSON antes, usado uma API e muito menos escrito contruído uma extensão. Não conhecia o [Content Security Policy]() e passei em torno de 7 dias, aprendendo como tudo isso funcionava até chegar nessa versão beta.**
+
+**É claro, não é porque é beta, que está incompleta. Sua premissa inical era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro "Projeto".**
+
+# Considerações
+
+**Antes de explicar seu funcionamento, gostaria de fazer algumas considerações. Tive um trabalho _imenso_ ao desenvolvê-la. Como eu disse, eu não sabia de praticamente nada. A minha maior dificuldade foi achar fontes de informação. Eu sei, o [developer.chrome.com]() é o site oficial e oferece vários guias, mas eles não são práticos.**  
+
+**Então me encontrei tendo que vasculhar a internet, utilizando tentativa e erro para ver o que funcionava e o que não. Se eu não tivesse perdido praticamente uns 4 dias apenas pesquisando, teria feito isto em muito menos tempo. Por outro lado, isso contribuiu em níveis inimagináveis para meu conhecimento e não me arrependendo.**
+
+**Entretanto, dexarei tudo o que eu descobri nesse desenvolvimento nas issues, assim como as fontes de onde eu tirei essas informações - Sim, eu salvei todas com medo de perdê-las. Dê uma olhada tambeém no [JS-Runner](). Lá, eu conto um pouco mais do porquê quis começar a criar extensões**
+
+---
+
+# O Código
+
+**Nessa seção, falarei um pouco de como o meu script funciona. Pedacinho por pedacinho. Gostaria de ressaltar que sou bem iniciante - Nunca ter escrito um JSON deixou isso bem claro. Por isso, as minhas soluções podem ser ineficientes e com certeza, devem existir melhores.**
+
+**Entretanto, me dediquei ao máximo. Mais tarde, falarei sobre os Bugs que encontrei, como os resolvi e sobre os que eu ainda não resolvi. Não me esquecerei do meu arquivo JSON, que pode ser útil se você não sabe como a estrutura dele funciona**
+
+## Background
+
+**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma Tab, requests que você faz dentre vários outros.**
+
+**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão _entangled_ que eu não sei explicar como que aquilo estava funcionando.**
+
+**Essa cara dele:** 
+```
+import('/modules/set-extension-info.js').then(({setExtensionInfo}) => {
+import('/modules/check-in-memory.js').then(({checkInMemory}) => {
+import('/modules/change-favicon.js').then(({changeFavIcon}) => {
+import('/modules/backup-favicon.js').then(({backupFavIcon}) => {
+import('/modules/find-favicon.js').then(({findFavIcon}) => {
+import('/modules/get-urls.js').then(({getURLs}) => {
+import('/modules/unpack.js').then(({unpack}) => {
+import('/modules/pack.js').then(({pack}) => {
+
+setExtensionInfo({});
+
+chrome.tabs.onCreated.addListener(tabCreated => {
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, newTab) => {
+        if (changeInfo.status === 'complete') {
+```
+**Eu sou meio pirado na questão de organização. Você perceberá que eu não sei indentar direito ainda. Não sigo padrões. Mas perceba os imports estão organizados em ordem decrescente.**
+
+**Para entender o que cada módulo faz, devemos primeiro observar o que eu mencionei: _Events_. Em geral, todo o meu backgroudn possui uma responsabilidade: Detectar a criação de Tabs e salvá-las na memória. Ele também atualiza as página quando necessário e corrigirá alguns erros que ocorrem em determinados sites.**
+
+**chrome.tabs é a maneira que você chama a API do Chrome. Nela você pode colocar alguns eventos como onCreated e onUpdated. onCreated sempre será disparado quando uma Tab for criada e onUpdated, sempre que uma Tab for atualizada.**
+
+**Combinando isso com uma propriedade de changeInfo que indica quando a Tab terminou de carregar, logo temos que: Toda vez que uma Tab terminar de carregar, meu script roda.**
+
+___Segundo o Chrome, uma Tab pode ganhar o status de complete e loading várias vezes durante uma request. Por isso, meu script é executado, em média 5 vezes por página. O que é estranho mais ajuda a corrigir um Bug específico que tratarei no final.___
+
+**Meu módulo `setExtensionInfo()` não tem importãncia por agora então vamos deixar ele de lado. Seguindo adiante, possuímos a segunda parte do código:**
+
+```
+const extensionInfo = setExtensionInfo({}); 
+const tab = newTab;
+
+const urls = getURLs(tab); 
+const response = checkInMemory(tab); 
+const URLObject = unpack(response.requiredURL); 
+
+    const empty = response.found? URLObject.empty: undefined;
+    const original = response.found? URLObject.original: undefined; 
+```
