@@ -73,3 +73,16 @@ const URLObject = unpack(response.requiredURL);
     const empty = response.found? URLObject.empty: undefined;
     const original = response.found? URLObject.original: undefined; 
 ```
+
+**Uma coisa que meus módulos deixam implícito é o fato de eu estar usando o localStorage para guardar os dados. Basicamente, apenas nome, você já sabe o que cada módulo faz. `setExtensionInfo()` cria um objeto na memória que contém informações importantes para a extensão.** 
+
+**Já `setExtensionInfo({})`, atualiza os valores desse objeto que está na memória e o retorna. Se gostaria de saber um pouco mais, dê uma olhada nesse post do Chrome sobre quais propriedades o objeto Tab pode ter: [Tab](https://developer.chrome.com/docs/extensions/reference/tabs/#type-Tab). Estamos interessados em duas delas: FavIconUrl e url.**
+
+**Logo adiante vemos mais três funções provenientes dos módulos: `getUrls()`, `checkInMemory()` e `unpack()`. Mencionei que guardo um objeto na memória, porém é em formato de String. Converto esse objeto utilizando `JSON.stringify()`. `unpack()` abstraí o comportamento de ter que fazer isto `JSON.parse(localStorage.getItem(tab.url))`. Já `checkInMemory()`, procura se a Tab já existe na memória. Ela me retorna um objeto contendo:**
+```
+{
+found: boolean,
+mainURL: string,
+requiredURL: string
+}
+```
