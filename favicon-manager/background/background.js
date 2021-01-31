@@ -56,19 +56,6 @@ chrome.tabs.onCreated.addListener(tabCreated => {
                     console.log('Error - Resete a Página');
                 };
 
-               /* if (response.found) {
-                    URLObject.state == 1?
-                     changeFavIcon(tab, URLObject) :
-                     backupFavIcon(tab, URLObject) ;
-
-                } else {
-                    findFavIcon(tab).then(icon => {
-                        const favIcon = tab.favIconUrl || icon;
-                            extensionInfo.webTracking == 'on'?
-                             pack(createURLObject(favIcon)) : false;
-                    })
-                }; */
-
                 function createURLObject(favIconUrl) {
                     return {
                         url: urls.requiredURL,
@@ -82,22 +69,6 @@ chrome.tabs.onCreated.addListener(tabCreated => {
         };
     });
 });
-
-// o favIcon é diferente de todos esses? Sim, mas ele existe? Não; seta na mémoria
-                // o favIcon é diferente de todos esses? Sim, mas ele existe? Sim; updata na memória
-                // O FavIcon é diferente de todos esses? Não, mas ele existe? Não; Error;
-                // O FavIcon é diferente de todos esses? Não, mas ele existe? Sim; Roda;
-
-/*
-Solução - a cada vez que for identificado que o URL do FavIcon é diferente do que está na meória,
-diferente de empty e difernete de null ou undefined,
-preciso pegar a quele favicon e atualizar na memória;
-*/
-
-/* Eu preciso que: 
-    A Cada vez que alguém entrar em uma Tab, eu checar se o FavIcon
-    é diferente de orginal, empty, undefined e null. Se sim, atualizá-lo; 
-*/
 
 });
 });
