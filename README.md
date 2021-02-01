@@ -33,9 +33,7 @@
 
 **Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão bagunçada que eu não sei explicar como que aquilo estava funcionando.**
 
-**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar.**
-
-**Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://`, a Chrome Web Store**
+**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://`, a Chrome Web Store**
 
 **Aliás, isso ainda não foi implementado. Existe um bug que me permite burlar o Content Security Policy e executar um Script na página apenas uma vez que descobri ao acaso. Não entendo como ele funciona, mas estou tentando implementar outro fallback que automaticamente corrigi o erro e avisa ao usuário que existe um problema com aquele site.**
 
@@ -49,11 +47,27 @@
 **A partir daqui temos 4 caminhos a serem seguidos:**
 
 - **O FavIcon é valido e o usuário já esteve na página antes: Neste caso, precisamos atualizar o FavIcon que está em memória. isto porque, alguns sites como [developer.mozilla.com]() alteram seu FavIcon conforme a página que você está.**
+
 - **O FavIcon é válido e o usuário nunca esteve na página antes: Neste caso, devemos criar um novo objeto na memória para o site.**
+
 - **O FavIcon é inválido e o usuário já esteve na página antes: Neste caso, apenas ignoramos. Se foi encontrado um objeto na memória, existe um FavIcon relacionado a ele que podemos usar. Por isso, apenas desconsideramos.**
+
 - **O FavIcon é inválido e o usuário nunca esteve na página antes: Neste caso, estamos diante de um site com o Bug Master. Por que esse nome? Porque eu quis. Exemplos de site com este Bug: Amazon, os artigos da MDN - Não a Home, www.evernote.com**
 
 ### O que faz um FavIcon ser válido?
+
+**Da Primeira vez que você entra em um site, é esperado que ele me retorne o FavIcon. Quando isso acontece, não existe outro FavIcon na memória, pois esta é a primeira vez que entramos nele. Entretanto, por conta de outro Bug, existe a possibilidade de que este FavIcon retornado seja a imagem PNG que estou usando para esconder o ícone.**
+
+**Isto ocorre quando o usuário escondeu o FavIcon e saiu do site. Deixando o FavIcon chacheado do Browser como uma imagem PNG. Preste atenção nessa frase. Além disso, existe o terceiro bug que ocorre quando o site não tém FavIcon. Tudo que eu tentar me retorna undefined.**
+
+**Neste caso, até poderíamos aesconder o ícone e retorná-lo ao estado anterior. Mas isto significaria criar mais uma condiconal. É melhor deixar as coisas assim.**
+
+**Recapitulando: PAra um ícone ser válido, ele precisa:**
+
+1. **Ser diferente do FavIcon que está na memória - chamado de original.**
+1. **Ser diferente da imagem PNG que estou usando - chamada de empty.**
+1. **Ser diferente de Undefined.**
+
 
 
 
