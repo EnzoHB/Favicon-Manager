@@ -39,4 +39,25 @@
 
 **Aliás, isso ainda não foi implementado. Existe um bug que me permite burlar o Content Security Policy e executar um Script na página apenas uma vez que descobri ao acaso. Não entendo como ele funciona, mas estou tentando implementar outro fallback que automaticamente corrigi o erro e avisa ao usuário que existe um problema com aquele site.**
 
+**A segunda coisa que o Script faz é buscar alguma informações que ele precisa. Ele precisa verificar se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredUrl de um site - protocol://subdomain?.domain.gtld?.tld?.**
+
+**Eu realmente não sei como a primeira parte da URL se chama, então criei este nome. Vi que alguns a chamam de URL Rule, mas descobri isso após bom tempo.**
+
+**Seguindo a diante temos uma Promise que busca forçadamente por um favIcon, através do `chrome.tabs.executeScript()`, iterando pelo HTML em busca do primeiro `<link rel='icon'>` que encontrar. 
+`chrome.tabs.query({...}, () => {...})` retorna, na maior parte das vezes um favIcon, mas nem sempre. Por isso, preciso que um ícone qualquer seja pego na página como fallback.**
+
+**A partir daqui temos 4 caminhos a serem seguidos:**
+
+- **O FavIcon é valido e o usuário já esteve na página antes: Neste caso, precisamos atualizar o FavIcon que está em memória. isto porque, alguns sites como [developer.mozilla.com]() alteram seu FavIcon conforme a página que você está.**
+- **O FavIcon é válido e o usuário nunca esteve na página antes: Neste caso, devemos criar um novo objeto na memória para o site.**
+- **O FavIcon é inválido e o usuário já esteve na página antes: Neste caso, apenas ignoramos. Se foi encontrado um objeto na memória, existe um FavIcon relacionado a ele que podemos usar. Por isso, apenas desconsideramos.**
+- **O FavIcon é inválido e o usuário nunca esteve na página antes: Neste caso, estamos diante de um site com o Bug Master. Por que esse nome? Porque eu quis. Exemplos de site com este Bug: Amazon, os artigos da MDN - Não a Home, www.evernote.com**
+
+### O que faz um FavIcon ser válido?
+
+
+
+
+
+
 
