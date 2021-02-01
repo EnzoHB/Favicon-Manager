@@ -31,7 +31,7 @@
 
 **Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma Tab, requests que você faz, dentre vários outros.**
 
-**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão bagunçada que eu não sei explicar como que aquilo estava funcionando.**
+**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código.**
 
 **Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://` e a Chrome Web Store**
 
@@ -62,7 +62,7 @@
 
 **Na Primeira vez que você entra em um site, é esperado que ele me retorne um FavIcon. Quando isso acontece, não existe outro na memória , pois esta é a primeira entramos. Já quando sites como a MDN, que alteram seu FavIcon durante a navegação, precisamos atualizá-lo novamente. Mas isso não é necssário quando o mesmo FavIcon já se encontra na memória.**
 
-**Entretanto, por conta de outro Bug, existe a possibilidade de que este FavIcon retornado seja a imagem PNG que estou usando para esconder o ícone. Pode ter passado na sua cabeça: "Ah! É só usar o que você encontrou com a Promise." Sim. Porém, o Browser me dá o FavIcon demensionado para o monitor da pessoa quando há esta possibilidade. É preferível isto do que pegar um 16x16, por exemplo.**
+**Entretanto, por conta de outro Bug, existe a possibilidade de que este FavIcon retornado seja a imagem PNG que estou usando para esconder o ícone. Pode ter passado na sua cabeça: "Ah! É só usar o que você encontrou com a Promise." Sim. Porém, o Browser me dá o FavIcon demensionado para o monitor da pessoa. É preferível isto a pegar um 16x16, por exemplo.**
 
 **O Retorno da imagem PNG ocorre quando o usuário escondeu o FavIcon e saiu do site. Deixando o FavIcon chacheado do Browser como aquela mesma imagem. Preste atenção nessa frase. Além disso, existe o terceiro bug que ocorre quando o site não tem FavIcon. Tudo que eu tentar me retorna undefined.**
 
@@ -76,7 +76,21 @@
 
 ---
 
-### O que é este tal de Bug master?
+### O que é este tal de Bug Master?
+
+**Venho falando dele há um tempinho. Ele ocorre quando o usuário nunca entrou no site antes e o FavIcon não é válido. Ele apenas ocorre na primeiríssima interação com um site em um dispositivo. Existem sites que não possuem uma tag que dá match com a minha RegExp - /shortcut icon|icon/gi.**
+
+**Além disso, o Browser não me retorna nenhum ícone... Da primeira vez. Pelo que percebi, o Browser, de alguma forma mágica, tem acesso a qualquer FavIcon e os em algum lugar para ser carregado de forma mais rápida na segunda interação e para eventualmente ser usado nos bookmarks. Toda vez que este ícone é alterado, o Browser também altera o guardado.**
+
+**Por este motivo, minha imagem PNG às vezes é retornada. No instante que você carrega o site, após ter saído com o ícone alterado, com o intuito de carregar mais rápido, o Browser puxa o favIcon que está guardado - A Imagem PNG. Isso faz com que meu script se confunda. Nesses casos, o FavIcon caí como inválido e como não há objeto em memória, caímos no erro.**
+
+**Essa é uma das poucas vezes que um erro ocorre. Como resolvê-lo? Incrivelmente, recaregando a página. Na segunda interação, o FavIcon retornado é o correto. Mas porque este Bug é Master? Simplesmente pelo fato de eu ter passado mais de 2 dias tentando entender como ele ocorria e como resolvê-lo. Escrevendo aqui, faz o parecer simples. Mas acredite que foi um sofrimento gigante.**
+
+## O Popup
+
+
+
+
 
 
 
