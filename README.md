@@ -35,9 +35,7 @@
 
 **Uma coisa que não mencionei ainda foi que estou usando o localStorage guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do [Content Security Policy]() ou simplesmente são URLs proibidas como as que começam com `edge://`,`file://`,`chrome://` e a Chrome Web Store**
 
-**Aliás, isso ainda não foi implementado. Existe um bug que me permite burlar o Content Security Policy e executar um Script na página que descobri ao acaso. Não entendo como ele funciona, mas estou tentando implementar outro fallback que automaticamente corrigi o erro e avisa ao usuário que existe um problema.**
-
-**A segunda coisa que o Script faz é buscar algumas informações que ele precisa, verificando se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredUrl de um site - protocol://subdomain?.domain.gtld?.tld?/**
+**A segunda coisa que o Script faz é buscar algumas informações que ele precisa, verificando se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredURL de um site - protocol://subdomain?.domain.gtld?.tld?/**
 
 **Eu realmente não sei como a primeira parte da URL se chama, então criei este nome. Vi que alguns a chamam de URL Rule, mas descobri isso após bom tempo.**
 
@@ -87,6 +85,13 @@
 
 ## O Popup
 
+**Já mencionei que o intuito desta extensão é ser minimalista e simples de ser usada. No Começo pensei apenas em esconder o FavIcon. Mas agora, estou com planos de alterar a imagem para qualquer uma que você quiser. Mesmo assim, existirão apenas dois botões.**
+
+**Não há muito do que se falar sobre a minha UI. Ela possui o mesmo backgorund que o tema Node Clean e nela existe um grande título e um pequeno subtítulo. Os Botões são dois Input Radios e a cor principal é um verde nem tão claro, nem tão escuro.**
+
+**Já o Script, também faz algo simples. Ao clicar an extensão, ele busca pela URL da Tab e faz o mesmo processo do Background. Se o usuário abrir a extensão antes da página estar carregada completamente, há um erro. Se a URL na memória estiver marcada como bugada - responsabilidade do Background - um erro é exisbido também.**
+
+**De forma simples, se não há erro, ao clicar alternadamente nos botões, o Script altera a UI, altera o objeto na memória e executa uma função responsável por alterar e trazer de volta os FavIcons. Nada de especial.**
 
 
 
