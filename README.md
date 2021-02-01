@@ -29,60 +29,10 @@
 
 ## Background
 
-**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma Tab, requests que você faz dentre vários outros.**
+**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma Tab, requests que você faz, dentre vários outros.**
 
-**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão _entangled_ que eu não sei explicar como que aquilo estava funcionando.**
+**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão bagunçada que eu não sei explicar como que aquilo estava funcionando.**
 
-**Essa cara dele:** 
-```
-import('/modules/set-extension-info.js').then(({setExtensionInfo}) => {
-import('/modules/check-in-memory.js').then(({checkInMemory}) => {
-import('/modules/change-favicon.js').then(({changeFavIcon}) => {
-import('/modules/backup-favicon.js').then(({backupFavIcon}) => {
-import('/modules/find-favicon.js').then(({findFavIcon}) => {
-import('/modules/get-urls.js').then(({getURLs}) => {
-import('/modules/unpack.js').then(({unpack}) => {
-import('/modules/pack.js').then(({pack}) => {
+**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são proibidos de serem acessados como arquivos que começam com edge://, file:// e chrome:// e a Chrome Web Store**
 
-setExtensionInfo({});
-
-chrome.tabs.onCreated.addListener(tabCreated => {
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo, newTab) => {
-        if (changeInfo.status === 'complete') {
-```
-**Eu sou meio pirado na questão de organização. Você perceberá que eu não sei indentar direito ainda. Não sigo padrões. Mas perceba os imports estão organizados em ordem decrescente.**
-
-**Para entender o que cada módulo faz, devemos primeiro observar o que eu mencionei: _Events_. Em geral, todo o meu backgroudn possui uma responsabilidade: Detectar a criação de Tabs e salvá-las na memória. Ele também atualiza as página quando necessário e corrigirá alguns erros que ocorrem em determinados sites.**
-
-**chrome.tabs é a maneira que você chama a API do Chrome. Nela você pode colocar alguns eventos como onCreated e onUpdated. onCreated sempre será disparado quando uma Tab for criada e onUpdated, sempre que uma Tab for atualizada.**
-
-**Combinando isso com uma propriedade de changeInfo que indica quando a Tab terminou de carregar, logo temos que: Toda vez que uma Tab terminar de carregar, meu script roda.**
-
-___Segundo o Chrome, uma Tab pode ganhar o status de complete e loading várias vezes durante uma request. Por isso, meu script é executado, em média 5 vezes por página. O que é estranho mais ajuda a corrigir um Bug específico que tratarei no final.___
-
-**Meu módulo `setExtensionInfo()` não tem importãncia por agora então vamos deixar ele de lado. Seguindo adiante, possuímos a segunda parte do código:**
-
-```
-const extensionInfo = setExtensionInfo({}); 
-const tab = newTab;
-
-const urls = getURLs(tab); 
-const response = checkInMemory(tab); 
-const URLObject = unpack(response.requiredURL); 
-
-    const empty = response.found? URLObject.empty: undefined;
-    const original = response.found? URLObject.original: undefined; 
-```
-
-**Uma coisa que meus módulos deixam implícito é o fato de eu estar usando o localStorage para guardar os dados. Basicamente, apenas nome, você já sabe o que cada módulo faz. `setExtensionInfo()` cria um objeto na memória que contém informações importantes para a extensão.** 
-
-**Já `setExtensionInfo({})`, atualiza os valores desse objeto que está na memória e o retorna. Se gostaria de saber um pouco mais, dê uma olhada nesse post do Chrome sobre quais propriedades o objeto Tab pode ter: [Tab](https://developer.chrome.com/docs/extensions/reference/tabs/#type-Tab). Estamos interessados em duas delas: FavIconUrl e url.**
-
-**Logo adiante vemos mais três funções provenientes dos módulos: `getUrls()`, `checkInMemory()` e `unpack()`. Mencionei que guardo um objeto na memória, porém é em formato de String. Converto esse objeto utilizando `JSON.stringify()`. `unpack()` abstraí o comportamento de ter que fazer isto `JSON.parse(localStorage.getItem(tab.url))`. Já `checkInMemory()`, procura se a Tab já existe na memória. Ela me retorna um objeto contendo:**
-```
-{
-found: boolean,
-mainURL: string,
-requiredURL: string
-}
-```
+**Aliás, isso ainda não foi implementado. Existe um pequeno bug que me permite burlar o Content Security Policy e executar um Script na página que descobri por um acaso. Não sei direito como isto funciona, mas o jeito de fazer isso acontecer é bem estranho. tratarei desses bugs mais tarde.** 
