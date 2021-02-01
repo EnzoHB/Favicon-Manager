@@ -33,6 +33,10 @@
 
 **Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão bagunçada que eu não sei explicar como que aquilo estava funcionando.**
 
-**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são proibidos de serem acessados como arquivos que começam com edge://, file:// e chrome:// e a Chrome Web Store**
+**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar.**
 
-**Aliás, isso ainda não foi implementado. Existe um pequeno bug que me permite burlar o Content Security Policy e executar um Script na página que descobri por um acaso. Não sei direito como isto funciona, mas o jeito de fazer isso acontecer é bem estranho. tratarei desses bugs mais tarde.** 
+**Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://`, a Chrome Web Store**
+
+**Aliás, isso ainda não foi implementado. Existe um bug que me permite burlar o Content Security Policy e executar um Script na página apenas uma vez que descobri ao acaso. Não entendo como ele funciona, mas estou tentando implementar outro fallback que automaticamente corrigi o erro e avisa ao usuário que existe um problema com aquele site.**
+
+
