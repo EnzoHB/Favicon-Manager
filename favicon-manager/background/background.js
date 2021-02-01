@@ -70,6 +70,9 @@ chrome.tabs.onCreated.addListener(tabCreated => {
     });
 });
 
+// Adicionado Através do GitPod. Vendo se funciona. 
+// Interessante
+
 });
 });
 });
