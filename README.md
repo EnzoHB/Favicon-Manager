@@ -33,16 +33,18 @@
 
 **Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código - a primeira versão estava tão bagunçada que eu não sei explicar como que aquilo estava funcionando.**
 
-**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://`, a Chrome Web Store**
+**Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://` e a Chrome Web Store**
 
 **Aliás, isso ainda não foi implementado. Existe um bug que me permite burlar o Content Security Policy e executar um Script na página apenas uma vez que descobri ao acaso. Não entendo como ele funciona, mas estou tentando implementar outro fallback que automaticamente corrigi o erro e avisa ao usuário que existe um problema com aquele site.**
 
-**A segunda coisa que o Script faz é buscar alguma informações que ele precisa. Ele precisa verificar se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredUrl de um site - protocol://subdomain?.domain.gtld?.tld?.**
+**A segunda coisa que o Script faz é buscar alguma informações que ele precisa. Ele precisa verificar se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredUrl de um site - protocol://subdomain?.domain.gtld?.tld?/**
 
 **Eu realmente não sei como a primeira parte da URL se chama, então criei este nome. Vi que alguns a chamam de URL Rule, mas descobri isso após bom tempo.**
 
 **Seguindo a diante temos uma Promise que busca forçadamente por um favIcon, através do `chrome.tabs.executeScript()`, iterando pelo HTML em busca do primeiro `<link rel='icon'>` que encontrar. 
 `chrome.tabs.query({...}, () => {...})` retorna, na maior parte das vezes um favIcon, mas nem sempre. Por isso, preciso que um ícone qualquer seja pego na página como fallback.**
+
+---
 
 **A partir daqui temos 4 caminhos a serem seguidos:**
 
@@ -54,19 +56,29 @@
 
 - **O FavIcon é inválido e o usuário nunca esteve na página antes: Neste caso, estamos diante de um site com o Bug Master. Por que esse nome? Porque eu quis. Exemplos de site com este Bug: Amazon, os artigos da MDN - Não a Home, www.evernote.com**
 
+---
+
 ### O que faz um FavIcon ser válido?
 
-**Da Primeira vez que você entra em um site, é esperado que ele me retorne o FavIcon. Quando isso acontece, não existe outro FavIcon na memória, pois esta é a primeira vez que entramos nele. Entretanto, por conta de outro Bug, existe a possibilidade de que este FavIcon retornado seja a imagem PNG que estou usando para esconder o ícone.**
+**Na Primeira vez que você entra em um site, é esperado que ele me retorne um FavIcon. Quando isso acontece, não existe outro na memória , pois esta é a primeira entramos. Já quando sites como a MDN, que alteram seu FavIcon durante a navegação, precisamos atualizá-lo novamente. Mas isso não é necssário quando o mesmo FavIcon já se encontra na memória.**
 
-**Isto ocorre quando o usuário escondeu o FavIcon e saiu do site. Deixando o FavIcon chacheado do Browser como uma imagem PNG. Preste atenção nessa frase. Além disso, existe o terceiro bug que ocorre quando o site não tém FavIcon. Tudo que eu tentar me retorna undefined.**
+**Entretanto, por conta de outro Bug, existe a possibilidade de que este FavIcon retornado seja a imagem PNG que estou usando para esconder o ícone. Pode ter passado na sua cabeça: "Ah! É só usar o que você encontrou com a Promise." Sim. Porém, o Browser me dá o FavIcon demensionado para o monitor da pessoa quando há esta possibilidade. É preferível isto do que pegar um 16x16, por exemplo.**
 
-**Neste caso, até poderíamos aesconder o ícone e retorná-lo ao estado anterior. Mas isto significaria criar mais uma condiconal. É melhor deixar as coisas assim.**
+**O Retorno da imagem PNG ocorre quando o usuário escondeu o FavIcon e saiu do site. Deixando o FavIcon chacheado do Browser como aquela mesma imagem. Preste atenção nessa frase. Além disso, existe o terceiro bug que ocorre quando o site não tem FavIcon. Tudo que eu tentar me retorna undefined.**
 
-**Recapitulando: PAra um ícone ser válido, ele precisa:**
+**Neste caso, até poderíamos esconder o ícone e retorná-lo ao estado anterior. Mas isto significaria criar mais uma condiconal. É melhor deixar as coisas assim.**
+
+**Recapitulando: Para um ícone ser válido, ele precisa:**
 
 1. **Ser diferente do FavIcon que está na memória - chamado de original.**
 1. **Ser diferente da imagem PNG que estou usando - chamada de empty.**
 1. **Ser diferente de Undefined.**
+
+---
+
+### O que é este tal de Bug master?
+
+
 
 
 
