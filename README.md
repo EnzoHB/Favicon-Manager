@@ -9,7 +9,7 @@
 
 **Eu me diverti e aprendi _MUITO_ desenvolvendo-a. Para se ter uma ideia, nunca tinha escrito um JSON antes, usado uma API e muito menos escrito contruído uma extensão. Não conhecia o [Content Security Policy]() e passei em torno de 7 dias, aprendendo como tudo isso funcionava até chegar nessa versão beta.**
 
-**É claro, não é porque é beta, que está incompleta. Sua premissa inical era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro "Projeto".**
+**É claro, não é porque é beta, que está incompleta. Sua premissa inicial era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro projetinho.**
 
 # Considerações
 
@@ -17,7 +17,7 @@
 
 **Então me encontrei tendo que vasculhar a internet, utilizando tentativa e erro para ver o que funcionava e o que não. Se eu não tivesse perdido praticamente uns 4 dias apenas pesquisando, teria feito isto em muito menos tempo. Por outro lado, isso contribuiu em níveis inimagináveis para meu conhecimento e não me arrependendo.**
 
-**Entretanto, dexarei tudo o que eu descobri nesse desenvolvimento nas issues, assim como as fontes de onde eu tirei essas informações - Sim, eu salvei todas com medo de perdê-las. Dê uma olhada tambeém no [JS-Runner](). Lá, eu conto um pouco mais do porquê quis começar a criar extensões**
+**Entretanto, dexarei tudo o que eu descobri nesse desenvolvimento nas issues, assim como as fontes de onde eu tirei as informações - Sim, eu salvei todas com medo de perdê-las. Dê uma olhada também no [JS-Runner](). Lá, eu conto um pouco mais do porquê quis começar a criar extensões**
 
 ---
 
@@ -29,9 +29,9 @@
 
 ## Background
 
-**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma Tab, requests que você faz, dentre vários outros.**
+**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma, requests que você faz, dentre vários outros.**
 
-**Entrando no meu arquivo Background, você se assusta. Eu realmente não encontrei uma maneira mais fácil do que usar vários `import().then()` no meu arquivo para utilizar os módulos que eu criei. Esses módulos foram _SUPER ÚTEIS_ para refatorar o meu código.**
+**Depois de várias versões que estavam uma bagunça, decidi fazer alguns módulos que me ajudariam. Porém, não achei uma maneira mais prática de utilizá-los no meu arquivo Background do que usar _import().then()_. Confesso que ficou um pouco bagunçado. Entretanto, aqueles módulos foram _SUPER ÚTEIS_ para refatoração do meu código.**
 
 **Uma coisa que não mencionei ainda foi que estou usando o localStorage da extensão para guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do Content Security Policy ou simplesmente são URLs proibidas como que começam com `edge://`,`file://`,`chrome://` e a Chrome Web Store**
 
