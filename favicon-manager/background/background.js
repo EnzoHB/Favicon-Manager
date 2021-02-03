@@ -53,7 +53,7 @@ chrome.tabs.onCreated.addListener(tabCreated => {
                 };
 
                 function error() {
-                    console.log('Error - Resete a Página');
+                    console.log('Error - Resete a Página'); //  Temporário
                 };
 
                 function createURLObject(favIconUrl) {
