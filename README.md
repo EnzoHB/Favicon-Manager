@@ -30,7 +30,7 @@
 
 **O Background tem duas importantes responsabilidades: Atualizar e carregar o estado atual de uma Tab que esteja na memória e se este não existir, criar um. Ele não faz nada nada mais além disso. Através da API do Chrome, detecto toda vez que uma Tab termina de carregar completamente - Um processo que pode ocorrer mais de uma vez por Tab.**
 
-**Após isso, começo a utilizar os módulos que criei. Seus nomes são bem intuitivos quanto ao que fazem: ***setExtensionInfo(), unpack(), getURLs() e checkInMemory().* Estou utilizando o localStorage da extensão para armazenar os dados que preciso. Mas o que são esse dados? No momento em que escrevo, são eles: *url, mainURL, state, favIconUrl e empty***
+**Após isso, começo a utilizar os módulos que criei. Seus nomes são bem intuitivos quanto ao que fazem:** ***setExtensionInfo(), unpack(), getURLs() e checkInMemory().*** **Estou utilizando o localStorage da extensão para armazenar os dados que preciso. Mas o que são esse dados? No momento em que escrevo, são eles:** ***url, mainURL, state, favIconUrl e empty.***
 
 - **url - É a propriedade do objeto que contém a aliased URL ( Acho que é este o nome ). Logo, *https://github.com/***
 
@@ -78,21 +78,49 @@
 
 **Já mencionei que o intuito desta extensão é ser minimalista e simples de ser usada. No Começo pensei apenas em esconder o FavIcon. Mas agora, estou com planos de alterar a imagem para qualquer uma que você quiser. Mesmo assim, existirão apenas dois botões.**
 
-**Não há muito do que se falar sobre a minha UI. Ela possui o mesmo backgorund que o tema Node Clean e nela existe um grande título e um pequeno subtítulo. Os Botões são dois Input Radios e a cor principal é um verde nem tão claro, nem tão escuro.**
+**Não há muito do que se falar sobre a minha UI. Ela possui o backgorund que o tema [Node Clean]() e nela existe um grande título e um pequeno subtítulo. Os Botões são dois Input Radios e a cor principal é um verde nem tão claro, nem tão escuro.**
 
-**Já o Script, também faz algo simples. Ao clicar an extensão, ele busca pela URL da Tab e faz o mesmo processo do Background. Se o usuário abrir a extensão antes da página estar carregada completamente, há um erro. Se a URL na memória estiver marcada como bugada - responsabilidade do Background - um erro é exisbido também.**
+**Já o Script, também faz algo simples. Ao clicar an extensão, ele busca pela URL da Tab e faz o mesmo processo do Background. Se o usuário abrir a extensão antes da página estar carregada completamente, haverá um erro quando eu implementar. Se a URL na memória estiver marcada como bugada - responsabilidade do Background - um erro será exibido também.**
 
-**De forma simples, se não há erro, ao clicar alternadamente nos botões, o Script altera a UI, altera o objeto na memória e executa uma função responsável por alterar e trazer de volta os FavIcons. Nada de especial.**
+**De forma simples, se não há erro, ao clicar alternadamente nos botões, o Script altera a UI, altera o objeto na memória e executa uma função proveniente dos módulos responsável por alterar e trazer de volta os FavIcons.**
 
+## Options Page
 
+**A Página de opções será uma espécie de painel de controle para esta extensão. Digo que ela será, mas o "core" dela já está pronto. Nela, existe uma tabela que contém o nome do Website, o estado atual dele, o FavIcon original, o Default e um botão de remove.**
 
+**Abaixo dessa tabela, há 5 controles e existirão mais no futuro. São eles:** ***Change allFavIcons, Clear all Cache, Pause web Tracking, More Info e Errors Page;***
 
+- **Change all favIcons simplesmente muda todos os states das Tabs em memória e para 1 e define que todas as novas tabs serão criadas com o state 1 e vice-versa. Change all favIcons faz isso através da função setextensionInfo(). Ela cria, atualiza e retorna um objeto na memória chamado extension-info. Pela propriedade "defaultState", determinanos com qual state novos objetos serão criados.**
 
+- **Clear all Cache limpa todos os objetos em memória que possuem um estado igual a 0. Se o estado for 1, uma série de erros indicando que "Não é possível limpar objetos com estado 1" deverão ser mostrados. Essa foi uma maneira de corrigir o erro loop. Essa mesma validação funciona para os botões "remove".**
 
+- **Pause Web Tracking é uma das maneiras que existirão para corrigir um determinado Bug. Ele impede a criação de novas tabs na memória, mas continua a atualizar as que já existem.**
 
+- **More Info direciona o User para cá. Se você veio por lá, que demais!**
 
+- **Erros Page como já mencionei, será uma outra página HTML que mostrará os logs dos erros que podem eventualmente ocorrer com a extensão.**
 
+---
 
+# Bugs 
+
+**Bugs, Bugs e mais Bugs. Convive tanto tempo com alguns que carinhosamentem os apelidei de Loop, Bug Master e Burlador de CSP. Nesta seção irei falar um pouco deles: Como eu assassinei alguns e estou à procura de matar outros.**
+
+## Loop
+
+**Se você já deu uma olhada no meu código e prestou atenção no que eu escrevi, já notou que o Browser não é nosso amigo quando se trata dos FavIcons. Ele é o responsável por esses três Bugs. O Loop acontecia quando você escondia o favIcon através da extensão, deletava a Tab da memória através da Options page e abria o site novamente. Isso causava o retorno da Imagem PNG.**
+
+**Na época, eu ainda não tinha implementado a validação e o sistema que tentava atualizar os ícones a cada vez que o usuário entrasse no site, fazendo com que a nova Tab que fosse criada pegasse como "original", a imagem PNG. Não importava o que você fizesse, a única maneira de resolvê-lo era desativar a extensão, entrar no site, sair e ativá-la novamente.**
+
+## Bug Master
+
+**Outro Bug que eu convivia, era o Bug Master. Existem algumas páginas que são bugadas, isto é, elas possuem um FavIcon, porém ele não está no main HTML da página. Como isso é possível eu não sei. E para piorar, na primeiríssima interação que você faz com um site. O Chrome não me retorna esse ícone.**
+
+**Então, o original ganhava um belo de um undefinede ficava lá. Eu ainda não tinha implementado o sistema de tentar atualizar o Ícone. Com ele, agora caímos em um erro nesse cenário e eu posso avisar ao usuário que a Tab é Bugada e pedir que ele feche e abra a página novamente.**
+
+**Mas por que ele é Master? Simplesmente por eu ter passado mais de dois dias descobrindo como ele ocorria e como eu poderia resolvê-lo. Como pensei que fosse o último Bug Ever, dei este nome. Acabei que estava errado. Existe mais um e só mais um. Ele, o Burlador de CSP**
+
+## Burlador de CSP 
 
 
 
