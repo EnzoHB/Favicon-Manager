@@ -3,12 +3,16 @@
 
 **Mais funcionalidades estão por vir! Ela funciona em conjunto com o tema [Node Clean.]() Dê uma olhada sobre o que ele se trata e então entenderá o propósito desta extensão.** 
 
+---
+
 # A Extensão  
 **Seu funcionamento é bem simples, entretanto ela se torna um pouco complexa devido à quantidade pequenos detalhes que existem. Para desenvolvê-la, utilizei a API tabs do Chrome e JavaScript Puro. É claro que seu propósito *é* ser simples. Por isso a sua UI é minimalista. Possui apenas dois botões que são usados para esconder e mostrar o FavIcon.**
 
 **Eu me diverti e aprendi _MUITO_ desenvolvendo-a. Para se ter uma ideia, nunca tinha escrito um JSON antes, usado uma API e muito menos escrito contruído uma extensão. Não conhecia o [Content Security Policy]() e passei em torno de 7 dias, aprendendo como tudo isso funcionava até chegar nessa versão beta.**
 
 **É claro, não é porque é beta, que está incompleta. Sua premissa inicial era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro projeto.**
+
+---
 
 # Considerações
 
@@ -24,7 +28,9 @@
 
 **Nessa seção, falarei um pouco de como o meu script funciona. Pedacinho por pedacinho. Gostaria de ressaltar que sou bem iniciante - Nunca ter escrito um JSON deixou isso bem claro. Por isso, as minhas soluções podem ser ineficientes e com certeza, devem existir melhores.**
 
-**Entretanto, me dediquei ao máximo. Mais tarde, falarei sobre os Bugs que encontrei, como os resolvi e sobre os que eu ainda não resolvi. Não me esquecerei do meu arquivo JSON, que pode ser útil se você não sabe como a estrutura dele funciona**
+**Entretanto, me dediquei ao máximo. Mais tarde, falarei sobre os Bugs que encontrei, como os resolvi e sobre os que eu ainda não resolvi.**
+
+---
 
 ## Background
 
@@ -74,6 +80,8 @@
 1. **Ser diferente da imagem PNG que estou usando - chamada de empty.**
 1. **Ser diferente de Undefined.**
 
+---
+
 ## O Popup
 
 **Já mencionei que o intuito desta extensão é ser minimalista e simples de ser usada. No Começo pensei apenas em esconder o FavIcon. Mas agora, estou com planos de alterar a imagem para qualquer uma que você quiser. Mesmo assim, existirão apenas dois botões.**
@@ -83,6 +91,8 @@
 **Já o Script, também faz algo simples. Ao clicar an extensão, ele busca pela URL da Tab e faz o mesmo processo do Background. Se o usuário abrir a extensão antes da página estar carregada completamente, haverá um erro quando eu implementar. Se a URL na memória estiver marcada como bugada - responsabilidade do Background - um erro será exibido também.**
 
 **De forma simples, se não há erro, ao clicar alternadamente nos botões, o Script altera a UI, altera o objeto na memória e executa uma função proveniente dos módulos responsável por alterar e trazer de volta os FavIcons.**
+
+---
 
 ## Options Page
 
@@ -106,11 +116,15 @@
 
 **Bugs, Bugs e mais Bugs. Convive tanto tempo com alguns que carinhosamentem os apelidei de Loop, Bug Master e Burlador de CSP. Nesta seção irei falar um pouco deles: Como eu assassinei alguns e estou à procura de matar outros.**
 
+---
+
 ## Loop
 
 **Se você já deu uma olhada no meu código e prestou atenção no que eu escrevi, já notou que o Browser não é nosso amigo quando se trata dos FavIcons. Ele é o responsável por esses três Bugs. O Loop acontecia quando você escondia o favIcon através da extensão, deletava a Tab da memória através da Options page e abria o site novamente. Isso causava o retorno da Imagem PNG.**
 
 **Na época, eu ainda não tinha implementado a validação e o sistema que tentava atualizar os ícones a cada vez que o usuário entrasse no site, fazendo com que a nova Tab que fosse criada pegasse como "original", a imagem PNG. Não importava o que você fizesse, a única maneira de resolvê-lo era desativar a extensão, entrar no site, sair e ativá-la novamente.**
+
+---
 
 ## Bug Master
 
@@ -122,5 +136,18 @@
 
 ## Burlador de CSP 
 
+**Se você sabe um pouco mais, conhece o Content Security Policy e sabe que existe determinados sites não acietam imagens de Sources desconhecidos. Bom, a primeira coisa que você pode ter notado olhando meu Script é que eu executo um código que altera o href das tags link para a URL da minha PNG**
 
+**A vasta maioria dos sites pelo que percebi, aceitam imagens de outros sources. O Problema com os que não é que se eu tentar mudar a imagem do favIcon, ele não funciona. Quer dizer...**
 
+**Eu estava estudando esse "Bug" até que acidentalmente, descobri uma maneira ineficiente de burlar o CSP. O Browser guarda o FavIcon para utilizá-los nos bookmarks e carregá-lo de forma mais rápida, certo? E toda vez que alteramos os href das Tags Link, o Browser altera o favIcon guardado.**
+
+**Sabemos que ao executar o script, as tags em si realmente mudam seu href, mas o site *refuses to use it.***
+
+**De alguma forma que não sei, sites que não aceitam imagens de outros sources, na primeira interação, quando você seta para state 1, sai do site e entra nele novamente, o FavIcon se torna a empty PNG. Isso acontecia quando não havia a validação. Quando eu a implementei, isso parou.**
+
+**Meu melhor palpite é que ao sair do site com os href's alterados, o Browser armazena o empty.png. Ao carregar de novo, o Icon salvo é carregado. No Background, o Icon retornado é o empty.png. Já o Icon é a URL original. Pela minha validação, eu já tenho Icon na memória e o retorno é empty. O Usuário já entrou na página uma vez, então ele ignora os dois e volta o ícone original.**
+
+**Minha esperança é identificar os sites bugados e dar uma "passe livre" a eles. Assim, no Background, ocorre o update dos links, o site vai *refuse to use it* como fallback, recorrerá ao ícone salvo, que mal sabe ele que é o mesmo.**
+
+**Existem alguns *gaps* na minha teoria. Se o site aceita "self" apenas, como ele usa o guardado e dá certo?. No mínimo, era undefined, não? Sim! Isso que pensei. Mas acho que ocorre uma sobreposição. Não é o site que fica com o FavIcon, é o Browser que sobrepõe o que o usuário está vendo. Eu não conheço 100% o CSP para afirmar nada, porém preciso achar uma solução para esse Bug e irei me basear nesta teoria.**
