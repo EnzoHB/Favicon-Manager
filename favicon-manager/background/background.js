@@ -25,11 +25,13 @@ chrome.tabs.onCreated.addListener(tabCreated => {
 
             findFavIcon(tab).then(icon => { 
 
-                const isValidF = (icon) => icon != undefined && icon != empty && icon != original;
+                const isValidF = (icon) => icon != undefined && icon != empty && icon != original? icon : false;
 
                     const returned = isValidF(tab.favIconUrl);
                     const finded = isValidF(icon);
                     const favIcon = returned || finded || undefined;
+
+                    console.log(returned, finded, favIcon);
 
                         if (favIcon) response.found? update() : set();
                         else response.found? run() : error();
@@ -41,18 +43,18 @@ chrome.tabs.onCreated.addListener(tabCreated => {
                 };
 
                 function set() {
-    
+                    const object = createURLObject(favIcon);
                     extensionInfo.webTracking == 'on'? 
-                     pack(createURLObject(favIcon)) : false;
+                     run(object) : false;
                 };
 
-                function run() {
+                function run(object = URLObject) {
 
-                    URLObject.state == 1?
-                     changeFavIcon(tab, URLObject) :
-                     backupFavIcon(tab, URLObject) ;
+                object.state == 1?
+                     changeFavIcon(tab, object) :
+                     backupFavIcon(tab, object) ;
                     
-                    pack(URLObject);
+                    pack(object);
                 };
 
                 function error() {
