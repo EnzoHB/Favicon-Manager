@@ -4,12 +4,11 @@
 **Mais funcionalidades estão por vir! Ela funciona em conjunto com o tema [Node Clean.]() Dê uma olhada sobre o que ele se trata e então entenderá o propósito desta extensão.** 
 
 # A Extensão  
-**Seu funcionamento é bem simples explicando através de linguagem natural, porém um pouco mais complicado no código devido à quantidade pequenos detalhes que existem.**
-**Para desenvolvê-la, utilizei a API tabs do Chrome e JavaScript Puro. Bem simples! É claro que seu propósito *é* ser simples. Por isso a sua UI é minimalista. Possui apenas dois botões que são usados para esconder e mostrar o FavIcon.**
+**Seu funcionamento é bem simples, entretanto ela se torna um pouco complexa devido à quantidade pequenos detalhes que existem. Para desenvolvê-la, utilizei a API tabs do Chrome e JavaScript Puro. É claro que seu propósito *é* ser simples. Por isso a sua UI é minimalista. Possui apenas dois botões que são usados para esconder e mostrar o FavIcon.**
 
 **Eu me diverti e aprendi _MUITO_ desenvolvendo-a. Para se ter uma ideia, nunca tinha escrito um JSON antes, usado uma API e muito menos escrito contruído uma extensão. Não conhecia o [Content Security Policy]() e passei em torno de 7 dias, aprendendo como tudo isso funcionava até chegar nessa versão beta.**
 
-**É claro, não é porque é beta, que está incompleta. Sua premissa inicial era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro projetinho.**
+**É claro, não é porque é beta, que está incompleta. Sua premissa inicial era simplesmente esconder os FavIcons. Quero melhorá-la e torná-la "Completa". Aliás, esse foi o meu primeiro projeto.**
 
 # Considerações
 
@@ -29,17 +28,19 @@
 
 ## Background
 
-**Um arquivo background em uma extensão é aquele que roda, obviamente, em plano de fundo. Nesses arquivos, você pode colocar listeners que escutam por _Browser Triggers_ ou _events._ Eventos no Browser são, por exemplo - criação de uma Tab, atualização de uma, requests que você faz, dentre vários outros.**
+**O Background tem duas importantes responsabilidades: Atualizar e carregar o estado atual de uma Tab que esteja na memória e se este não existir, criar um. Ele não faz nada nada mais além disso. Através da API do Chrome, detecto toda vez que uma Tab termina de carregar completamente - Um processo que pode ocorrer mais de uma vez por Tab.**
 
-**Depois de várias versões que estavam uma bagunça, decidi fazer alguns módulos que me ajudariam. Porém, não achei uma maneira mais prática de utilizá-los no meu arquivo Background do que usar _import().then()_. Confesso que ficou um pouco bagunçado. Entretanto, aqueles módulos foram _SUPER ÚTEIS_ para refatoração do meu código.**
+**Após isso, começo a utilizar os módulos que criei. Seus nomes são bem intuitivos quanto ao que fazem: ***setExtensionInfo(), unpack(), getURLs() e checkInMemory().*** Estou utilizando o localStorage da extensão para armazenar os dados que preciso. Mas o que são esse dados? No momento em que escrevo, são eles: *url, mainURL, state, favIconUrl e empty***
 
-**Uma coisa que não mencionei ainda foi que estou usando o localStorage guardar os meus dados, que neste caso, cada site válido que o usuário entrar. Digo válido, pois alguns não permitem a execução de scripts e trocar imagens através do [Content Security Policy]() ou simplesmente são URLs proibidas como as que começam com `edge://`,`file://`,`chrome://` e a Chrome Web Store**
+- **url - É a propriedade do objeto que contém a aliased URL ( Acho que é este o nome ). Logo, *https://github.com/***
 
-**A segunda coisa que o Script faz é buscar algumas informações que ele precisa, verificando se o usuário já entrou naquela Tab antes. Ele faz isso dando match nas keys do localStorage e comparando com a requiredURL de um site - protocol://subdomain?.domain.gtld?.tld?/**
+- **mainURL - É a propriedade derivada da url que, neste caso é o nome do site. Logo, *github.com***
 
-**Eu realmente não sei como a primeira parte da URL se chama, então criei este nome. Vi que alguns a chamam de URL Rule, mas descobri isso após bom tempo.**
+- **state - Pode possuir dois valores: 0 e 1. Quando 1, o favIcon é alterado. Quando 0, nada acontece.**
 
-**Seguindo a diante temos uma Promise itera pelo HTML utilizando o `chrome.tabs.executeScript()` em busca do primeiro `<link rel='icon'>` que encontrar. `chrome.tabs.query({...}, () => {...})` retorna um favIcon, mas nem sempre. Por isso, preciso que um ícone qualquer seja pego como fallback. Se a Promise for rejeitada, sei que o CSP não me deixa executar o Script na página.**
+- **favIconUrl - Contém a URL do FavIcon original do site. Sérios Bugs relacionados a ela.**
+
+- **empty - Contém a URL da imagem usada para esconder o FavIcon do site.**
 
 ---
 
