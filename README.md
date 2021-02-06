@@ -38,7 +38,7 @@
 
 **Após isso, começo a utilizar os módulos que criei. Seus nomes são bem intuitivos quanto ao que fazem:** ***setExtensionInfo(), unpack(), getURLs() e checkInMemory().*** **Estou utilizando o localStorage da extensão para armazenar os dados que preciso. Mas o que são esse dados? No momento em que escrevo, são eles:** ***url, mainURL, state, favIconUrl e empty.***
 
-- **url - É a propriedade do objeto que contém a aliased URL ( Acho que é este o nome ). Logo, *https://github.com/***
+- **url - É a propriedade do objeto que contém a primeira parte da URL. Logo, *https://github.com/***
 
 - **mainURL - É a propriedade derivada da url que, neste caso é o nome do site. Logo, *github.com***
 
