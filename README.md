@@ -74,18 +74,6 @@
 1. **Ser diferente da imagem PNG que estou usando - chamada de empty.**
 1. **Ser diferente de Undefined.**
 
----
-
-### O que é este tal de Bug Master?
-
-**Venho falando dele há um tempinho. Ele ocorre quando o usuário nunca entrou no site antes e o FavIcon não é válido. Ele apenas ocorre na primeiríssima interação com um site em um dispositivo. Existem sites que não possuem uma tag que dá match com a minha RegExp - `/shortcut icon|icon/gi`.**
-
-**Além disso, o Browser não me retorna nenhum ícone... Da primeira vez. Pelo que percebi, o Browser, de alguma forma mágica, tem acesso a qualquer FavIcon e os guarda em algum lugar para ser carregado de forma mais rápida na segunda interação e para eventualmente ser utilizado nos bookmarks. Toda vez que este ícone é alterado, o Browser altera o guardado.**
-
-**Por este motivo, minha imagem PNG às vezes é retornada. No instante que você carrega o site, após ter saído com o ícone alterado, com o intuito de carregar mais rápido, o Browser puxa o favIcon que está guardado - A Imagem PNG. Isso faz com que meu script se confunda. Nesses casos, o FavIcon caí como inválido e como não há objeto em memória, caímos no erro.**
-
-**Essa é uma das poucas vezes que um erro ocorre. Como resolvê-lo? Incrivelmente, recaregando a página. Na segunda interação, o FavIcon retornado é o correto. Mas porque este Bug é Master? Simplesmente pelo fato de eu ter passado mais de 2 dias tentando entender como ele ocorria e como resolvê-lo. Escrevendo aqui, faz o parecer simples. Mas acredite que foi um sofrimento gigantesco.**
-
 ## O Popup
 
 **Já mencionei que o intuito desta extensão é ser minimalista e simples de ser usada. No Começo pensei apenas em esconder o FavIcon. Mas agora, estou com planos de alterar a imagem para qualquer uma que você quiser. Mesmo assim, existirão apenas dois botões.**
