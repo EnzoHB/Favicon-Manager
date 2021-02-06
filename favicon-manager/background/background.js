@@ -25,11 +25,14 @@ chrome.tabs.onCreated.addListener(tabCreated => {
 
             findFavIcon(tab).then(icon => { 
 
-                const favIcon = tab.favIconUrl || icon;
-                const isValid = favIcon != undefined && favIcon != empty && favIcon != original;
+                const isValidF = (icon) => icon != undefined && icon != empty && icon != original;
 
-                    if (isValid) response.found? update() : set();
-                    else response.found? run() : error();
+                    const returned = isValidF(tab.favIconUrl);
+                    const finded = isValidF(icon);
+                    const favIcon = returned || finded || undefined;
+
+                        if (favIcon) response.found? update() : set();
+                        else response.found? run() : error();
 
                 function update() {
             
