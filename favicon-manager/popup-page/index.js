@@ -1,16 +1,15 @@
-import { checkInMemory } from '/modules/check-in-memory.js';
 import { pack } from '/modules/pack.js';
 import { unpack } from '/modules/unpack.js';
+import { cleanTab } from '/modules/clean-tab.js';
 import { backupFavIcon } from '/modules/backup-favicon.js';
 import { changeFavIcon } from '/modules/change-favicon.js';
 
 const radios = document.getElementsByClassName('inputRadio');
 
-    chrome.tabs.query({active: true, currentWindow: true}, currentTab => {
-        const tab = currentTab[0];
-        const response = checkInMemory(tab);
-            const URLObject = unpack(response.requiredURL);
-            const state = URLObject.state;
+    chrome.tabs.query({active: true, currentWindow: true}, dirtyTab => {
+        const cleanedTab = cleanTab(dirtyTab);
+        const URLObject = unpack(cleanedTab.mainURL);
+        const state = URLObject.state;
 
         state == 0?
          radios[1].setAttribute('checked', '') :
