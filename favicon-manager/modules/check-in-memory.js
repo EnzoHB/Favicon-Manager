@@ -1,9 +1,26 @@
-function checkInMemory(mainURL) {
+function checkInMemory(tab) {
+    const fullURL = tab.url;
+    const local = localStorage;
 
-    for (let i = 0; i < localStorage.length; i++) {
-        if (local.key(i) === mainURL) return true;
+    const matchWebSite = /.+?:\/\/.+?(\..+?)?(\..+?)?(\..+?)?\//;
+    const requiredURL = matchWebSite.exec(fullURL)[0];
+
+    const matchMain = /.+?:\/\/(.+?)\//;
+    const mainURL = matchMain.exec(requiredURL)[1];
+
+    for (let i = 0; i < local.length; i++) {
+        if (local.key(i) == requiredURL) return {
+            found: true,
+            requiredURL: requiredURL,
+            main: mainURL
+        }
     };
-    return false;
+
+    return {
+        found: false,
+        mainURL: null,
+        requiredURL: null
+    }
 };
 
 export { checkInMemory }
